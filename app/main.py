@@ -18,20 +18,19 @@ def main():
         blocking=True,
         resume_stream=True,
         only_events=[WriteRowsEvent, DeleteRowsEvent, UpdateRowsEvent, RotateEvent],
-        log_file="mysql-bin-changelog.000261", log_pos=52794687
+        log_file="mysql-bin-changelog.000261", log_pos=55980698
     )
-    next_binlog = int
+    log_file = stream.log_file
 
     for binlogevent in stream:
         if binlogevent.event_type == 4:
             print("next_binlog: {}".format(binlogevent.next_binlog))
-            binlog_file = binlogevent.next_binlog
+            log_file = binlogevent.next_binlog
             continue
 
         for row in binlogevent.rows:
-            print(dir(binlogevent.packet))
             event = {"schema": binlogevent.schema, "table": binlogevent.table, "type": type(binlogevent).__name__,
-                     "row": row, "binlog_file": binlog_file, "log_pos": binlogevent.packet.log_pos}
+                     "row": row, "log_file": log_file, "log_pos": binlogevent.packet.log_pos}
 
             print(event)
 
