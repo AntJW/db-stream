@@ -1,17 +1,36 @@
 version: '3'
 services:
-  db-stream: &default
+  service: &default
     build: .
     depends_on:
       - redis
+      - db
     environment:
-      - APP_NAME=db-stream
+      - CACHE_HOST=redis
+      - CACHE_PORT=6379
+      - MYSQL_HOST=
+      - MYSQL_PORT=3306
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=
     ports:
-      - "5000"
+      - "5000:5000"
     volumes:
-      - "./app:/usr/src/app"
-      - "./tests:/usr/src/tests"
-    command: python /usr/src/app/main.py
+      - ./app:/usr/src/app
+      - ./tests:/usr/src/tests
+      - ./requirements.txt:/usr/local/airflow/requirements.txt
+    links:
+      - redis
+      - db
+    command: python app/main.py
 
   redis:
-    image: "redis:alpine"
+    image: "redis:5.0-rc6"
+    ports:
+      - "6379:6379"
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD=example

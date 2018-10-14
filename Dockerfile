@@ -1,6 +1,6 @@
-FROM python:3
+FROM python:3.7.0
 
-WORKDIR /usr/src
+WORKDIR /usr/src/db-stream
 
 COPY app/ app/
 COPY tests/ tests/
