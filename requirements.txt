@@ -1,0 +1,2 @@
+boto3==1.9.23
+mysql-replication==0.18

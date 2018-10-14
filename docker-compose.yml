@@ -1,0 +1,17 @@
+version: '3'
+services:
+  db-stream: &default
+    build: .
+    depends_on:
+      - redis
+    environment:
+      - APP_NAME=db-stream
+    ports:
+      - "5000"
+    volumes:
+      - "./app:/usr/src/app"
+      - "./tests:/usr/src/tests"
+    command: python /usr/src/app/main.py
+
+  redis:
+    image: "redis:alpine"
