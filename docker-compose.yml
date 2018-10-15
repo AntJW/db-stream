@@ -4,7 +4,6 @@ services:
     build: .
     depends_on:
       - redis
-      - db
     environment:
       - CACHE_HOST=redis
       - CACHE_PORT=6379
@@ -20,17 +19,9 @@ services:
       - ./requirements.txt:/usr/local/airflow/requirements.txt
     links:
       - redis
-      - db
     command: python app/main.py
 
   redis:
     image: "redis:5.0-rc6"
     ports:
       - "6379:6379"
-
-  db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD=example
