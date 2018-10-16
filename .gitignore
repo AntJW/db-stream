@@ -2,3 +2,4 @@
 .env.docker
 .idea/
 .DS_Store
+.vscode
