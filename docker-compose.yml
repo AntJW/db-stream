@@ -2,10 +2,10 @@ version: '3'
 services:
   service: &default
     build: .
-    depends_on:
-      - cache
+    # depends_on:
+    #   - cache
     ports:
-      - "5000:5000"
+      - 5000:5000
     volumes:
       - ./app:/usr/src/app
       - ./tests:/usr/src/tests
@@ -18,20 +18,21 @@ services:
   cache:
     image: redis:5.0-rc6
     ports:
-      - "6379:6379"
+      - 6379:6379
     env_file:
       - .env
 
   queue:
-    image: rabbitmq:3.7.8
+    image: rabbitmq:3.7.8-management
     ports:
-      - "5672:5672"
+      - 5672:5672
+      - 15672:15672
     env_file:
       - .env
 
   db:
     image: mysql:8.0
     ports:
-      - "3306:3306"
+      - 3306:3306
     env_file:
       - .env
