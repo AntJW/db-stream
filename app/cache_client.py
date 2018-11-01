@@ -18,6 +18,6 @@ class CacheClient:
         except Exception as e:
             sys.exit(e)
 
-        log_file = "mysql-bin-changelog.000261"
-        log_pos = 56030111
+        log_file = "binlog.000002"
+        log_pos = 4
         return log_file, log_pos

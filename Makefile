@@ -15,7 +15,14 @@ help: ## Show this help
 	@fgrep -h " ## " $(MAKEFILE_LIST) | fgrep -v fgrep | sed -Ee 's/([a-z.]*):[^#]*##(.*)/\1##\2/' | column -t -s "##"
 
 run: ## Run the application locally
-	@docker-compose up --abort-on-container-exit --build redis service
+	@docker-compose up --build --detach cache
+	@docker-compose up --abort-on-container-exit --build service
+
+db:
+	@docker-compose up --build --detach db
+
+queue:
+	@docker-compose up --build --detach queue
 
 test: ## Run the application's test suite
 	@docker-compose -f docker-compose.ci.yml build test
