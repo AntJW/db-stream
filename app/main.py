@@ -9,7 +9,7 @@ from pymysqlreplication.event import RotateEvent
 cache = CacheClient()
 
 def main():
-    log_file, log_pos = cache.last_event_completed()
+    log_file, log_pos = cache.get_position()
 
     stream = BinLogStreamReader(
         connection_settings = {
@@ -18,7 +18,7 @@ def main():
             "user": os.getenv("MYSQL_USER"),
             "passwd": os.getenv("MYSQL_PASSWORD")
         },
-        server_id=1,
+        server_id=int(os.getenv("SERVICE_ID")),
         blocking=True,
         resume_stream=True,
         only_events=[WriteRowsEvent, DeleteRowsEvent, UpdateRowsEvent, RotateEvent],
@@ -37,6 +37,8 @@ def main():
                      "row": row, "log_file": log_file, "log_pos": binlogevent.packet.log_pos}
 
             print(event)
+
+            cache.set_position(log_file=log_file, log_pos=binlogevent.packet.log_pos)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,8 @@ services:
       - ./tests:/usr/src/tests
       - ./requirements.txt:/usr/local/airflow/requirements.txt
     command: ["python", "app/main.py"]
+    environment:
+      - SERVICE_ID=1001
     env_file:
       - .env
     tty: true
