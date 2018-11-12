@@ -18,6 +18,9 @@ class CacheClient:
             data = self._conn.hgetall(self._service_id)
             log_file = data["log_file"]
             log_pos = int(data["log_pos"])
+        except KeyError:
+            log_file = ""
+            log_pos = None
         except Exception as e:
             sys.exit(e)
 
