@@ -36,7 +36,6 @@ def main():
 
     for binlogevent in stream:
         if binlogevent.event_type == constant.MYSQL_ROTATE_EVENT:
-            print("next_binlog: {}".format(binlogevent.next_binlog))
             log_file = binlogevent.next_binlog
             log_pos = binlogevent.position
             continue
@@ -48,7 +47,7 @@ def main():
                 event = {"service_id": SERVICE_ID, "schema": binlogevent.schema, 
                          "table": binlogevent.table, "type": type(binlogevent).__name__,
                          "row": row, "log_file": log_file, "log_pos": binlogevent.packet.log_pos}
-                print(event)
+
                 confirmed = message_broker.publish_message(message=event, service_id=SERVICE_ID, schema=event["schema"], 
                                                            table=event["table"])
                 
